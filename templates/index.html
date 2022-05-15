@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="main-container container">
+    <div class="row">
+        <div class="col-md-6">
+            <img class="background-img  " src="{{ url_for('static',filename='img/bg.svg') }}">
+
+        </div>
+        <div class="col-md-6 text-center login-box">
+            <img class="user-icon ml-4"
+                 src="https://raw.githubusercontent.com/sefyudem/Responsive-Login-Form/82b8d8efd3b0ac6382b9d0d71a99c6cf9dcefa23/img/avatar.svg"
+                 height="80px">
+            <h2 CLASS="mt-2 ml-4 " style="color: #757575;">WELCOME</h2>
+
+            <form method="post">
+                {{ form.csrf_token() }}
+                <div class="mt-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></div>
+                        </div>
+                        {{ form.username(class_="form-control",placeholder="Username") }}
+                    </div>
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
+                        </div>
+                        {{ form.password(class_="form-control",placeholder="Password") }}
+                    </div>
+                    {{ form.submit(class="btn w-100 mt-5 ml-2 login-btn", type="submit", value="Login") }}
+                </div>
+            </form>
+            <div class="text-danger mt-4">
+                {% for field, errors in form.errors.items() %}
+                {{ ', '.join(errors) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

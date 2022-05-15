@@ -1,0 +1,39 @@
+.main-container{
+    height: 600px;
+    border: rgb(235,235,235) solid 2px;
+    width: 100%;
+    background: url("/static/img/wave.png");
+    background-position-x: left;
+    background-position-y:bottom;
+    background-size: 500px;
+    background-repeat: no-repeat;
+}
+.background-img{
+    height: 400px;
+    margin-top: 100px;
+
+}
+.user-icon{
+    margin-top: 40px;
+}
+.login-box{
+    padding: 80px;
+}
+.label-input{
+    text-align: left !important;
+}
+.login-box i{
+    color: #2ac58f;
+}
+.input-group-text{
+    background: white;
+    border: none;
+}
+.login-box input{
+    border: none;
+    border-bottom: 2px solid #2ac58f;
+}
+.login-btn{
+    background: #2dd096;
+    color: white;
+}

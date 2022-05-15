@@ -1,0 +1,275 @@
+{% extends 'admin.html' %}
+{% block admin %}
+<!--suppress BadExpressionStatementJS -->
+<script>
+    //when document ready execute
+    $(document).ready(function () {
+        $(".js-example-basic-multiple").select2();
+        saved_data = [];
+        $.getJSON("/updateExam?id="+{{request.args.get("exam")}}, function (data) {
+            saved_data = data;
+            //for each tr in tbody
+            $("tbody").find("select").each(function (i, data) {
+                $(this).val(saved_data[i][0]).trigger('change');
+            });
+            $("tbody").find("tr").each(function (i, data) {
+                //find all input inside $this
+                $(this).find("input").each(function (n, temp) {
+                    //set value of temp
+                    $(temp).val(saved_data[i-1][n+1]);
+                    });
+                });
+        });
+
+
+        //for each over list
+
+    });
+
+
+    let array = {};
+    {% for  student in students %}
+    array["{{student.roll_no}}"] = "{{student.fname+ ' ' + student.lname}}";
+    {% endfor %}
+
+    function find_student(str) {
+        console.log("working");
+        console.log(str.parentElement.previousSibling.previousSibling);
+        //change content of previous sibling
+        str.parentElement.previousSibling.previousSibling.innerHTML = array[str.value];
+
+
+    }
+
+    function add_row() {
+        $("#editExam tbody tr").each(function () {
+            //check if element display none
+            if ($(this).css("visibility") === "hidden") {
+                //set css display block
+                $(this).css("visibility", "visible");
+                return false;
+            }
+
+        });
+    }
+
+    function delete_row() {
+        let last_r;
+        $("#editExam tbody tr").each(function () {
+            if ($(this).css("visibility") === "hidden") {
+                $(last_r).css("visibility", "hidden");
+                //find all input field in tr and reset
+
+                $(last_r).find("input").val("");
+                return false;
+                }
+
+
+            last_r = this;
+
+        });
+    }
+
+
+    function submit_data(){
+
+            alert("Data Submitted Successfully!");
+        let data = [];
+        //loop over tbody rows jquery
+        $("#editExam tbody tr").each(function () {
+            let temp = [];
+            td_roll = $(this).find("select").val();
+            temp.push(td_roll);
+            //loop over input in this
+            $(this).find("input").each(function () {
+                temp.push($(this).val());
+            });
+            console.log(td_roll);
+            data.push(temp);
+
+        });
+        //jquery post data in json to server
+        $.ajax({
+            url: '/updateExam',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data) {
+                $('#target').html(data.msg);
+            },
+            data: JSON.stringify(data)
+
+        });
+         console.log(data);
+    }
+
+
+
+</script>
+
+<section class=" gradient-custom mb-5">
+    <div class="row justify-content-center align-items-center h-100 text-primary">
+        <div class="col-12">
+            <h1 class="display-6 text-center mt-3 mb-3">Marks</h1>
+
+        </div>
+        <div class="col-12">
+
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Add Exam <i class="fa-solid fa-plus"></i>
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade w-100" id="exampleModal" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Exam</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/addexam" method="POST">
+                                <!-- bootstrap form two input type text-->
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Exam Name</label>
+                                    <select class="form-select form-control" name="exam_name">
+                                        <option value="House Test 1">House Test 1</option>
+                                        <option value="House Test 2">House Test 2</option>
+                                        <option value="House Test 3">House Test 3</option>
+                                        <option value="Final Exam">Final Exam</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Class</label>
+                                    <select class="form-select form-control" name="class_name">
+                                        {% for dept in depts %}
+                                        {% for i in range(1,4) %}
+                                        <option value="{{ dept.dept_name+' Year '  }}{{i}}">{{ dept.dept_name+" Year "
+                                            }}{{i}}
+                                        </option>
+                                        {% endfor %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Subjects (Seperated by ',')</label>
+                                    <input type="text" class="form-control" id="exampleInputClass2"
+                                           aria-describedby="emailHelp" placeholder="Subjects" name="subjects">
+                                </div>
+                                <!-- submit button-->
+                                <input type="submit" class="btn btn-primary w-100" value="Submit"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table mt-3">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Exam Name</th>
+                    <th scope="col">Class</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for exam in exams %}
+                <tr>
+                    <th scope="row">{{ exam.id }}</th>
+                    <td>{{ exam.exam_name }}</td>
+                    <td>{{ exam.class_name }}</td>
+                    <td><a class="btn btn-primary text-white" href="/marks?exam={{exam.id}}">Edit <i
+                            class="fa-solid fa-pen-to-square"></i></a></td>
+                    <td><a class="btn btn-danger" href="/addexam?del={{ exam.id }}">Delete <i
+                            class="fa-solid fa-trash"></i></a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        {% if request.args.get("exam") %}
+        <div class="col-12">
+            <!-- Table Bootstrap -->
+            <table class="table mt-3" id="editExam" exam_id="">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Student</th>
+                    <th scope="col">Roll No</th>
+                    <th scope="col">Details</th>
+                </tr>
+                </thead>
+                <tbody id="marks_tbody">
+                {% for i in range(80) %}
+                {% if i> hidden-1 %}
+                <tr style="visibility:hidden;">
+                {% else %}
+                <tr style="visibility:visible;">
+                {% endif %}
+                    <td>{{i+1}}</td>
+                    <td><input class="form-control disabled student_name" value="" disabled/></td>
+                    <td>
+                        <select id="roll_select_{{i}}" class="js-example-basic-multiple" name="states[]"
+                                onchange="find_student(this)">
+                            <option value="">Select Roll No</option>
+                            {% for student in students %}
+                            <option value="{{student.roll_no}}">{{student.roll_no}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        {% for sub in current_exam.subjects.split(",") %}
+                        <div class="row text">
+                            <div class="col-4">
+                                {{sub}}
+                            </div>
+                            <div class="col-4">
+                                <input  class="form-control" placeholder="Obtained Marks" type="number"/>
+                            </div>
+                            <div class="col-4">
+                                <input class="form-control" placeholder="Total Marks" type="number"/>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+
+</section>
+{% if request.args.get("exam")%}
+<div class="footer fixed-bottom">
+    <!-- bootstrap two buttons-->
+    <div class="row text-center">
+        <div class="col-12 w-100">
+            <button class="btn btn-success m-2" onclick="add_row()" style="width: 180px;"><i class="fa-solid fa-plus"></i>
+                Add Row
+            </button>
+            <button class="btn btn-danger m-2" onclick="delete_row()" style="width: 180px;"><i
+                    class="fa-solid fa-trash"></i> Delete
+            </button>
+
+
+        </div>
+        <div class="col-12 w-100">
+            <button class="btn btn-primary px-2" style="width: 380px;" onclick="submit_data()" style="width: 8%;">
+                <i class="fa-solid fa-pen-to-square"></i>Update
+            </button>
+        </div>
+
+
+    </div>
+    </div>
+{% endif %}
+    {% endblock %}

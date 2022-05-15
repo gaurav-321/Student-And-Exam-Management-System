@@ -1,0 +1,250 @@
+{% extends 'admin.html' %}
+{% block admin %}
+<script>
+    function change(str) {
+        $.ajax({
+            url: "/department?show=" + str,
+            success: function (result) {
+                $("#selectsection").html(result);
+            }
+        })
+    }
+</script>
+<section class=" gradient-custom mb-5">
+    <h1 class="display-6 text-center mt-3 mb-3 text-primary">Students</h1>
+
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col-12 col-lg-9 col-xl-7">
+      <form method="post" action="/managestudent">
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+
+                        <div class="form-outline">
+                            <input type="text" id="firstName" class="form-control form-control-lg" name="fname"
+                                   required/>
+                            <label class="form-label" for="firstName">First Name</label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-4">
+
+                        <div class="form-outline">
+                            <input type="text" id="lastName" class="form-control form-control-lg" name="lname"
+                                   required/>
+                            <label class="form-label" for="lastName">Last Name</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+
+                        <div class="form-outline">
+                            <input type="text" id="ffname" class="form-control form-control-lg" name="ffname" required/>
+                            <label class="form-label" for="ffname">Father's Name</label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-4">
+
+                        <div class="form-outline">
+                            <input type="text" id="mfname" class="form-control form-control-lg" name="mfname" required/>
+                            <label class="form-label" for="mfname">Mother's name</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                        <div class="form-outline datepicker w-100">
+                            <input
+                                    type="date"
+                                    class="form-control form-control-lg"
+                                    id="birthdayDate"
+                                    name="dob" required
+                            />
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-4">
+
+                        <h6 class="mb-2 pb-1">Gender: </h6>
+
+                        <div class="form-check form-check-inline">
+                            <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="gender"
+                                    id="femaleGender"
+                                    value="female"
+                                    checked
+                                    required
+                            />
+                            <label class="form-check-label" for="femaleGender">Female</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="gender"
+                                    id="maleGender"
+                                    value="male"
+                            />
+                            <label class="form-check-label" for="maleGender">Male</label>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <input type="email" id="emailAddress" class="form-control form-control-lg"
+                                   name="personal_email"
+                                   required/>
+                            <label class="form-label" for="emailAddress">Personal Email</label>
+                        </div>
+                        <div class="form-outline">
+                            <input type="email" id="emailAddress2" class="form-control form-control-lg"
+                                   name="student_email"
+                                   required/>
+                            <label class="form-label" for="emailAddress">Student Email</label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <input type="tel" id="phoneNumber" class="form-control form-control-lg" name="phno"
+                                   required/>
+                            <label class="form-label" for="phoneNumber">Phone Number</label>
+                        </div>
+
+                        <div class="form-outline">
+                            <input type="tel" id="phoneNumber2" class="form-control form-control-lg" name="pphno2"
+                                   required/>
+                            <label class="form-label" for="phoneNumber">Parent Phone Number</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <input type="number" id="rollno" class="form-control form-control-lg" name="rollno"
+                                   required/>
+                            <label class="form-label" for="rollno">Roll No.</label>
+                        </div>
+                        <div class="form-outline">
+                            <input type="number" id="rollno2" class="form-control form-control-lg" name="registerno"
+                                   required/>
+                            <label class="form-label" for="rollno2">Registration No.</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 mb-4 pb-2">
+                        <div class="form-outline">
+                            <select class="form-select form-select-sm p-1" aria-label=".form-select-sm example"
+                                    onchange="change(this.value)" name="trade" required>
+                                <option selected>Select Trade</option>
+                                {% for trade in depts %}
+                                <option value="{{ trade.dept_name }}">{{ trade.dept_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-4 pb-2">
+                        <div class="form-outline">
+                            <select class="form-select form-select-sm p-1" id="selectsection"
+                                    aria-label=".form-select-sm example" name="section" required>
+                                <option selected>Select Section</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-12">
+                        <div class="form-outline">
+                            <input type="number" id="aadhaar" class="form-control form-control-lg" name="aadhaar"
+                                   required/>
+                            <label class="form-label" for="aadhaar">Aadhaar</label>
+                        </div>
+
+                        <div class="form-outline">
+                            <input type="number" id="rollno3" class="form-control form-control-lg" name="imeino"
+                                   required/>
+                            <label class="form-label" for="rollno3">Imei No.</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 pt-2">
+                    <input class="btn btn-primary btn-lg w-100" type="submit" value="Submit"/>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section>
+<div class="row user-management mt-5 mr-1 table-responsive scrollme">
+
+    <table class="table table-responsive">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Fname</th>
+            <th scope="col">Lname</th>
+            <th scope="col">Father's Name</th>
+            <th scope="col">Mother's Name</th>
+            <th scope="col">D.O.B</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Personal Email</th>
+            <th scope="col">Student Email</th>
+            <th scope="col">Student Phone No.</th>
+            <th scope="col">Parent Phone No.</th>
+            <th scope="col">Roll No.</th>
+            <th scope="col">Registration No.</th>
+            <th scope="col">Imei No.</th>
+            <th scope="col">Trade</th>
+            <th scope="col">Section</th>
+            <th scope="col">Aadhaar</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for student in students %}
+        <tr>
+            <th class="pt-3" scope="row">{{ students.index(student)+1 }}</th>
+            <td>{{ student.fname }}</td>
+            <td>{{ student.lname }}</td>
+            <td>{{ student.father_name }}</td>
+            <td>{{ student.mother_name }}</td>
+            <td>{{ student.dob }}</td>
+            <td>{{ student.gender }}</td>
+            <td>{{ student.personal_email }}</td>
+            <td>{{ student.student_email }}</td>
+            <td>{{ student.phone_no }}</td>
+            <td>{{ student.parent_phone_no }}</td>
+            <td>{{ student.roll_no }}</td>
+            <td>{{ student.registration_no }}</td>
+            <td>{{ student.imei_no }}</td>
+            <td>{{ student.trade }}</td>
+            <td>{{ student.section }}</td>
+            <td>{{ student.aadhaar }}</td>
+            <td>
+                <a class="btn btn-primary text-light"
+                   href="/managestudent?delete={{ student.id }}"><i
+                        class="fa fa-trash"></i> Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

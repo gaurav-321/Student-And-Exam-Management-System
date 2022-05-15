@@ -1,0 +1,69 @@
+{% extends 'admin.html' %}
+{% block admin %}
+
+<div class="height-100 bg-light">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Language', 'Speakers (in millions)'],
+          ['Male', {{mcount}}],
+          ['Female',  {{fcount}}]
+        ]);
+
+      var options = {
+        legend: 'none',
+        pieSliceText: 'label',
+        title: '',
+        pieStartAngle: 100,
+          backgroundColor: { fill:'transparent' }
+      };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+      }
+    </script>
+    <h1 class="display-6 text-center mt-3 mb-3 text-primary">Dashboard</h1>
+    <section class='statis text-center'>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="box bg-primary">
+                        <h3>{{no_of_exam}}</h3>
+                        <p class="lead">No of Exams</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="box bg-danger">
+                        <h3>{{no_of_admin}}</h3>
+                        <p class="lead">Admin Users</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="box bg-success text-light">
+                        <h3>{{no_of_student}}</h3>
+                        <p class="lead">Total Students</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div id="piechart" class="text-center ml-auto mr-auto" style="width: 900px; height: 500px;"></div>
+                </div>
+               <span class="ml-auto mr-auto">
+                    Student Distribution
+               </span>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+{% endblock %}

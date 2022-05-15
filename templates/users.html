@@ -1,0 +1,85 @@
+{% extends 'admin.html' %}
+{% block admin %}
+<script>
+    function update_field(id) {
+        user = document.getElementById(id + "username").value;
+        pwd = document.getElementById(id + "password").value;
+        window.open("/adduser?action=update&id=" + id + "&username=" + user + "&password=" + pwd, "_self");
+
+    }
+</script>
+<div class="height-100 bg-light">
+    <h1 class="display-6 text-center mt-3 mb-3 text-primary">Add Users</h1>
+    <section class='statis text-center'>
+        <div class="container-fluid">
+            <div class="row">
+
+            </div>
+
+        </div>
+        <div class="register-form">
+            <form action="/adduser" method="GET">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="email" name="username" placeholder="ExampleUser" type="text"
+                               type="text">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="inputPassword">Password</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="inputPassword" name="password" placeholder="**********"
+                               type="password">
+                    </div>
+                </div>
+                <button class=" btn btn-primary mt-3 w-100" name="submit" id="submit" style="width: 100%;">Submit
+                </button>
+            </form>
+        </div>
+        <div class="row user-management mt-5">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Update</th>
+                    <th scope="col">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                <tr>
+                    <th class="pt-3" scope="row">{{ user.id }}</th>
+                    <td><input type="text" class="form-control" id="{{ user.id }}username" placeholder="Username"
+                               value="{{ user.username }}"></td>
+                    <td><input type="text" class="form-control" id="{{ user.id }}password" placeholder="Password"
+                               value="{{ user.password }}"></td>
+                    <td>
+                        <button class="btn btn-primary text-light"
+                                onclick="update_field({{ user.id }})"><i
+                                class="fa fa-check"></i> Update
+                        </button>
+                    </td>
+                    <td>
+                        {% if user.username=="admin" %}
+
+                        <a class="btn btn-secondary text-light" disabled
+                           href="#"><i class="fa fa-trash"></i> Disabled</a>
+                        {% else %}
+
+                        <a class="btn btn-danger text-light"
+                           href="/adduser?username={{ user.username }}&action=delete"><i class="fa fa-trash"></i> Delete</a>
+
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+</div>
+{% endblock %}

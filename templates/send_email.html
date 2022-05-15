@@ -1,0 +1,55 @@
+{% extends 'admin.html' %}
+{% block admin %}
+<script>
+    $(document).ready(function () {
+        $('.js-example-basic-single').select2();
+        $('#email').on("select2:select", function (e) {
+            console.log("working");
+            var selected = $("#email").val();
+            $(".js-example-basic-single option[value='" + selected + "']").each(function () {
+                $(this).remove();
+            });
+            $("#emaillist").val($("#emaillist").val() + "\n" + selected);
+
+
+        });
+
+    });
+
+    function clear_email() {
+        $("#emaillist").val("");
+
+    }
+
+
+</script>
+<div class="height-100 bg-light">
+    <h1 class="display-6 text-center mt-3 mb-3 text-primary">Send Email</h1>
+    <section class=' text-center'>
+        <div class="row w-100">
+            <form style="width: 100%" action="/send_email" method="post">
+                <div class="col-12">
+                    <span class="text-dark h6">Email Select: <br></span>
+                    <select id="email" class="js-example-basic-single form-select" onselect="getSelection()">
+                        <option value="" class="">Select The Roll No.</option>
+                        {% for student in students %}
+                        <option value="{{student.student_email}}">{{student.roll_no}}</option>
+                        {% endfor %}
+
+                    </select>
+                    <textarea name="emaillist" class="form-control w-25 ml-auto mr-auto mt-3" rows="2" id="emaillist"
+                              style="text-align: center; horiz-align: center" placeholder="ENTER EMAIL"></textarea>
+                    <textarea name="subject" class="form-control w-25 ml-auto mr-auto mt-3" rows="1"
+                              style="text-align: center; horiz-align: center" placeholder="ENTER Title/Subject"></textarea>
+                    <textarea name="body" class="form-control w-25 ml-auto mr-auto mt-3" rows="5"
+                              style="text-align: center; horiz-align: center" placeholder="ENTER Message"></textarea>
+                    <button class="btn btn-primary mt-3 w-12">Send</button>
+                    <a class="btn btn-secondary mt-3 w-12" href="/send_email">Clear</a>
+                </div>
+            </form>
+        </div>
+</div>
+</section>
+
+</div>
+{% endblock %}

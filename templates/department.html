@@ -1,0 +1,59 @@
+{% extends 'admin.html' %}
+{% block admin %}
+
+<div class="container">
+    <h1 class="display-6 text-center mt-3 mb-3 text-primary">Add Departments</h1>
+    <form action="/department" method="POST">
+        <div class="form-group row col-md-8 ml-auto mr-auto">
+            <label for="dept" class="col-sm-2 col-form-label">Trade</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control bg-white" id="dept"
+                       placeholder="Enter Trade Name" name="trade">
+            </div>
+        </div>
+        <div class="form-group row col-md-8 ml-auto mr-auto">
+            <label for="sec-1" class="col-sm-2 col-form-label">Section 1</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control bg-white" id="sec-1"
+                       placeholder="Section 1" name="section1">
+            </div>
+        </div>
+        <div class="form-group row col-md-8 ml-auto mr-auto">
+            <label for="sec-2" class="col-sm-2 col-form-label">Section 2</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control bg-white" id="sec-2"
+                       placeholder="Section 2" name="section2">
+            </div>
+        </div>
+        <button class="form-control btn btn-primary ml-3 mt-5" style="width: 97%;">SUBMIT</button>
+
+    </form>
+    <div class="container-fluid w-100" style="margin-top: 100px;">
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Department</th>
+                <th scope="col">Section 1</th>
+                <th scope="col">Section 2</th>
+                <th scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for x in depts %}
+            <tr>
+                <th scope="row">{{ depts.index(x)+1 }}</th>
+                <td>{{ x.dept_name }}</td>
+                <td>{{ x.section1 }}</td>
+                <td>{{ x.section2 }}</td>
+                <td><a class="btn btn-primary text-light" href="/department?del={{ x.id }}"><i class="fa fa-trash"></i> Delete</a> </td>
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}
