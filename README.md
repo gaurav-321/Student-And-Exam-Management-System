@@ -1,4 +1,4 @@
-# Exam Management System
+# Student And Exam Management System
 This is a web application developed using Flask framework in Python to manage exams in an educational institution. It has features such as:
 
 - User login and registration
